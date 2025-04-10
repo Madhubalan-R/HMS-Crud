@@ -163,7 +163,7 @@ if (!$row) {
                 </div>
             <div class="row">
                 <div class="col text-center">
-                    <a href="http://localhost:8080/Hospital%20Management/view.php"><button type="submit" class="btn btn-primary mt-3"><- Back</button></a>
+                    <a href="http://localhost:8080/Hospital%20Management/HMS-Crud/view.php"><button type="submit" class="btn btn-primary mt-3"><- Back</button></a>
                 </div>
             </div>
     </div>

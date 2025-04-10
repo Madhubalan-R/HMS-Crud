@@ -17,3 +17,15 @@ h1{
    display: flex;
    justify-content: space-around;
 }
+.topNavbar{
+   display:flex;
+   justify-content: space-between;
+   height: 60px;
+   margin-left: 65px;
+   margin-right: 65px;
+   background-color: blue;
+   color: whitesmoke;
+   border-radius: 20px;
+   padding: 10px;
+   margin-bottom: 10px;
+}
