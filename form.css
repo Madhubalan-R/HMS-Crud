@@ -1,0 +1,19 @@
+.form{
+   background-color: aqua;
+   border-radius: 10px;
+   padding: 20px;
+
+}
+h1{
+   text-align: center;
+   padding: 20px;
+}
+
+#button{
+   align-items: center;
+}
+
+.Data{
+   display: flex;
+   justify-content: space-around;
+}
