@@ -1,6 +1,5 @@
 .form{
    background-color: aqua;
-   border-radius: 10px;
    padding: 20px;
 
 }
@@ -21,11 +20,35 @@ h1{
    display:flex;
    justify-content: space-between;
    height: 60px;
-   margin-left: 65px;
-   margin-right: 65px;
-   background-color: blue;
-   color: whitesmoke;
-   border-radius: 20px;
+   background-color: rgb(79, 199, 255);
+   color: white;
+   padding: 10px;
+}
+.searchBar{
+   display:flex;
+   justify-content: space-between;
+   height: 60px;
+   background-color: rgb(233, 241, 245);
    padding: 10px;
    margin-bottom: 10px;
+}
+.vitalNavbar{
+   display:flex;
+   justify-content: space-between;
+   height: 60px;
+   background-color: rgb(79, 199, 255);
+   color: white;
+   padding: 10px;
+   margin-bottom: 10px;
+}
+.checkbox{
+   margin-left: 30px;
+}
+.buttons{
+   display: flex;
+   margin-left: 45%;
+   padding: 10px;
+}
+.btn{
+   margin-right: 10px;
 }

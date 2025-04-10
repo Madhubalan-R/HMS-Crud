@@ -13,13 +13,18 @@
 
 <body>
     <h1>Hospital Management system</h1>
-    <div class="topNavbar">
-        <h2 style="margin-left: 30px;">Add New Patient Enrollement</h2>
-        <a href="http://localhost:8080/Hospital%20Management/HMS-Crud/view.php"><button type="submit"
-            class="btn btn-primary mb-3">All List</button></a></div>
+   
     <div class="container">
         <form action="submit.php" method="post">
             <div class="form">
+                <div class="topNavbar">
+                    <h2 style="margin-left: 30px;">Add New Patient Enrollement</h2>
+                    <a href="http://localhost:8080/Hospital%20Management/HMS-Crud/view.php" class="btn btn-success">Patient Enrollement List</a>
+                </div>
+                <div class="searchBar">
+                    <h5 style="margin-right: 20px; margin-top:8px;">Search: </h5>
+                    <input type="search" class="form-control" placeholder="Search here...">
+                </div>
                 <div class="row">
                     <div class="mb-3 col">
                         <label class="form-label">Patient First Name</label>
@@ -34,7 +39,6 @@
                         <input type="tel" class="form-control" name="Phone_number" id="phoneNumber"
                             placeholder="Phone Number" maxlength="10" required>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="mb-3 col">
@@ -125,12 +129,117 @@
                             placeholder="Enter Contact Number" maxlength="10" required>
                     </div>
                 </div>
+
+           <!-- VITAL DETAILS -->
+
+            <div class="vitalNavbar">
+                <h2 style="margin-left: 30px;">Vitals Details</h2>
             </div>
             <div class="row">
-                <div class="col text-center">
+                <div class="mb-3 col">
+                    <label class="form-label">Temparature</label>
+                    <input type="text" class="form-control" name="Temparature"
+                        placeholder="Enter Temparature">
+                </div>
+                <div class="mb-3 col">
+                    <label class="form-label">Blood Pressure</label>
+                    <input type="text" class="form-control" name="BloodPressure" placeholder="Enter Blood Pressure">
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col">
+                    <label class="form-label">Height</label>
+                    <input type="text" class="form-control" name="Height"
+                        placeholder="Enter Height">
+                </div>
+                <div class="mb-3 col">
+                    <label class="form-label">Weight</label>
+                    <input type="text" class="form-control" name="Weight" placeholder="Enter Weight">
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col">
+                    <label class="form-label">Pulse Rate</label>
+                    <input type="text" class="form-control" name="PulseRate"
+                        placeholder="Enter Pulse Rate">
+                </div>
+                <div class="mb-3 col">
+                    <label class="form-label">Repositary Rate</label>
+                    <input type="text" class="form-control" name="RepositaryRate" placeholder="Enter Repositary Rate">
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col">
+                    <label class="form-label">SpO2</label>
+                    <input type="text" class="form-control" name="SpO2"
+                        placeholder="Enter SpO2">
+                </div>
+                <div class="mb-3 col">
+                    <label class="form-label">Pain Scale(1-10)</label>
+                    <input type="text" class="form-control" name="PainScale" placeholder="Enter Pain Scale 1-10">
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-control" name="Location" placeholder="Enter Location">
+                </div>
+                <div class="mb-3 col">
+                    <label class="form-label">Character</label>
+                    <input type="text" class="form-control" name="Character" placeholder="Enter Character">
+                </div>
+            </div>
+
+            <!-- ALLERGY -->
+
+            <div class="vitalNavbar">
+                <h2 style="margin-left: 30px;">ALLERGY Details</h2>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" name="Allergy"
+                    placeholder="Enter Allergy Details">
+            </div>
+
+             <!-- CURRENT COMPLAINTS -->
+
+             <div class="vitalNavbar">
+                <h2 style="margin-left: 30px;">Current Complaints</h2>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" name="CurrentComplaints"
+                    placeholder="Enter Current Complaints">
+            </div>
+
+             <!-- BIOLOGICAL HISTORY -->
+
+             <div class="vitalNavbar">
+                <h2 style="margin-left: 30px;">Biological History</h2>
+            </div>
+            <div class="row">
+                <div class="mb-3 col">
+                    <label class="form-label">Alcohol</label>
+                    <input type="checkbox" class="checkbox">
+                </div>
+                <div class="mb-3 col">
+                    <label class="form-label">Smoking</label>
+                    <input type="checkbox" class="checkbox">
+                </div>
+                <div class="mb-3 col">
+                    <label class="form-label">Tabacco</label>
+                    <input type="checkbox" class="checkbox">
+                </div>
+                <div class="mb-3 col">
+                    <input type="text" class="form-control" placeholder="other">
+                </div>
+            </div>
+        </div>
+        <div class="buttons">
+            <div class="text-center">
                     <button type="submit" class="btn btn-primary mt-3">Submit</button>
                 </div>
-
+                <div class="text-center">
+                    <a href="http://localhost:8080/Hospital%20Management/HMS-Crud/patient.html" class="btn btn-secondary mt-3">Cancel</a>
+                </div>
             </div>
         </form>
 
@@ -155,6 +264,22 @@
         document.getElementById('age').value = age;
 
     }
+    document.querySelector('.searchBar input').addEventListener('input', function () {
+    const searchValue = this.value;
+
+    fetch(`fetchData.php?search=${searchValue}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                document.querySelector("input[name='fname']").value = data.fname;
+                document.querySelector("input[name='lname']").value = data.lname;
+                document.querySelector("input[name='Phone_number']").value = data.phone_number;
+            }
+        })
+        .catch(error => console.error('Error fetching data:', error));
+});
 </script>
 
 </html>
