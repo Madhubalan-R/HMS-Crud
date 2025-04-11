@@ -1,55 +1,29 @@
 <?php
-// Get the search query from the request
-$query = isset($_GET['query']) ? $_GET['query'] : false;
+header('Content-Type: application/json'); // Ensure the response is JSON
+$conn = new mysqli('127.0.0.1:3308', 'root', '', 'patientdata');
 
-if ($query) {
-    // Database connection
-    $conn = new mysqli('127.0.0.1:3308', 'root', '', 'patientdata');
+if ($conn->connect_error) {
+    die(json_encode(['error' => 'Connection failed: ' . $conn->connect_error]));
+}
 
-    // Check the connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    // Secure the query to prevent SQL injection
-    $stmt = $conn->prepare("SELECT * FROM patienttable WHERE FirstName LIKE CONCAT(?, '%') ORDER BY FirstName ASC");
-    $stmt->bind_param("s", $query);
+if (isset($_POST['searchTerm']) && !empty($_POST['searchTerm'])) {
+    $searchTerm = $_POST['searchTerm'];
+    $stmt = $conn->prepare("SELECT * FROM patienttable WHERE FirstName LIKE ? OR LastName LIKE ?");
+    $likeTerm = '%' . $searchTerm . '%';
+    $stmt->bind_param("ss", $likeTerm, $likeTerm);
     $stmt->execute();
     $result = $stmt->get_result();
+    $patients = [];
 
-    // Prepare response
-    $suggestions = [];
-    $data = [];
     while ($row = $result->fetch_assoc()) {
-        $suggestions[] = $row['FirstName']; // Assuming 'fname' is the column for first names
-        $data[] = $row['Phone_number']; // Adjust this to match your table's columns
+        $patients[] = $row; // Add each row to the patients array
     }
-    $response = [
-        'query' => $query,
-        'suggestions' => $suggestions,
-        'data' => $data,
-    ];
 
-    // Return as JSON
-    echo json_encode($response);
-
-    // Close the connection
-    $stmt->close();
-    $conn->close();
+    echo json_encode($patients); // Return as JSON
+} else {
+    echo json_encode(['error' => 'No search term provided']);
 }
+
+$stmt->close();
+$conn->close();
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-<input type="text" name="" id="box" placeholder="Search for patient..." />
-
-
-
-
-</body>
-</html>

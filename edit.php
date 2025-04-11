@@ -161,6 +161,7 @@ $conn->close();
                 <input type="tel" class="form-control" name="Contact_Number" maxlength="10" value="<?php echo $row['Contact_Number']; ?>" required>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
+            <a href="http://localhost:8080/Hospital%20Management/HMS-Crud/view.php" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

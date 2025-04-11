@@ -7,54 +7,51 @@
     <title>Registration form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.11/jquery.autocomplete.min.js"></script>
-        
-    <link rel="stylesheet" href="form.css">
-
+        <link rel="stylesheet" href="form.css">
+        <script src="ageCalculate.js"></script>
 </head>
-<script>
-   document.getElementById('searchBox').addEventListener('input', function () {
-    const searchQuery = this.value;
-
-    // Send an AJAX request to fetch matching data
-    fetch(`fetchData.php?query=${searchQuery}`)
-        .then(response => response.json())
-        .then(data => {
-            // Example: Display the first match's details
-            if (data.length > 0) {
-                const firstMatch = data[0];
-                document.querySelector("input[name='fname']").value = firstMatch.name;
-                document.querySelector("input[name='lname']").value = firstMatch.lname;
-                document.querySelector("input[name='Phone_number']").value = firstMatch.phone;
-            }
-        })
-        .catch(error => console.error('Error fetching data:', error));
-});
-    </script>
 
 <body>
+    <div class="container bodySection">
+    <div class="sidebar">
+        <h4 class="text-center">HEALTHCARE</h4>
+        <a href="#" class="active"><i class="fa fa-home"></i> Dashboard <i class="fa fa-caret-down" style="margin-left: 100px;"></i></a>
+        <a href="#"><i class='fa fa-user-plus'></i> Admin <i class="fa fa-caret-down" style="margin-left: 127px;"></i></a>
+        <a href="#"><i class='fa fa-eyedropper'></i> Drug Inward <i class="fa fa-caret-down" style="margin-left: 87px;"></i></a>
+        <a href="#"><i class='fa fa-group'></i> Reception <i class="fa fa-caret-down" style="margin-left: 101px;"></i></a>
+        <a href="#"><i class='fa fa-stethoscope'></i> Doctor <i class="fa fa-caret-down"></i></a>
+        <a href="#"><i class='fa fa-thermometer-empty'></i> Laborator <i class="fa fa-caret-down"></i></a>
+        <a href="#"><i class='fa fa-wpforms'></i> Reports <i class="fa fa-caret-down"></i></a>
+        <a href="#"><i class='fa fa-pie-chart'></i> Tracking <i class="fa fa-caret-down"></i></a>
+
+    </div>
+    <div class="formSection">
     <h1>Hospital Management system</h1>
-   
-    <div class="container">
+        <div class="searchBar">
+            <h5 style="margin-right: 20px; margin-top:8px;">Search: </h5>
+            <input type="text" id="searchField" class="form-control" placeholder="Search for a patient...">
+        </div>
+        <div id="resultList" style="border: 1px solid #ccc; max-height: 200px; overflow-y: auto;"></div>
+
+        <!-- Form Section -->
+
         <form action="submit.php" method="post">
             <div class="form">
                 <div class="topNavbar">
                     <h2 style="margin-left: 30px;">Add New Patient Enrollement</h2>
                     <a href="http://localhost:8080/Hospital%20Management/HMS-Crud/view.php" class="btn btn-success">Patient Enrollement List</a>
                 </div>
-                <div class="searchBar">
-                    <h5 style="margin-right: 20px; margin-top:8px;">Search: </h5>
-                    <input type="search" class="form-control" id="searchBox" placeholder="Search here...">
-                </div>
+               <br>
                 <div class="row">
                     <div class="mb-3 col">
                         <label class="form-label">Patient First Name</label>
-                        <input type="text" class="form-control" name="fname" id="box" placeholder="Enter Firstname" required>
+                        <input type="text" class="form-control" name="fname" id="firstName" placeholder="Enter Firstname" required>
                     </div>
                     <div class="mb-3 col">
                         <label class="form-label">LastName</label>
-                        <input type="text" class="form-control" name="lname" placeholder="Enter Lastname" required>
+                        <input type="text" class="form-control" name="lname" id="lastName" placeholder="Enter Lastname" required>
                     </div>
                     <div class="mb-3 col">
                         <label class="form-label">Phone Number</label>
@@ -75,7 +72,7 @@
                     </div>
                     <div class="mb-3 col">
                         <label class="form-label">Gender</label>
-                        <select name="select" class="form-select" required>
+                        <select name="select" class="form-select" id="gender" required>
                             <option selected>Select Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -264,41 +261,73 @@
                 </div>
             </div>
         </form>
+            
     </div>
-
+</div>
 </body>
 <script>
-    function calculateAge() {
-        const dobInput = document.getElementById('dob').value;
-        const dob = new Date(dobInput);
-        const today = new Date();
+  document.getElementById("searchField").addEventListener("keyup", function () {
+    const searchTerm = this.value;
 
-        let age = today.getFullYear() - dob.getFullYear();
-
-        const monthDifference = today.getMonth() - dob.getMonth();
-        const dayDifference = today.getDate() - dob.getDate();
-        if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
-            age--;
-        }
-        document.getElementById('age').value = age;
-
-    }
-    document.querySelector('.searchBar input').addEventListener('input', function () {
-    const searchValue = this.value;
-
-    fetch(`fetchData.php?search=${searchValue}`)
+    if (searchTerm.length > 0) {
+        fetch('fetchData.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `searchTerm=${encodeURIComponent(searchTerm)}`
+        })
         .then(response => response.json())
         .then(data => {
+            const resultList = document.getElementById("resultList");
+            resultList.innerHTML = '';
+
             if (data.error) {
-                alert(data.error);
+                const errorItem = document.createElement("div");
+                errorItem.textContent = data.error;
+                errorItem.style.color = "red";
+                resultList.appendChild(errorItem);
+                resultList.style.display = "block";
             } else {
-                document.querySelector("input[name='fname']").value = data.fname;
-                document.querySelector("input[name='lname']").value = data.lname;
-                document.querySelector("input[name='Phone_number']").value = data.phone_number;
+                data.forEach(item => {
+                    const listItem = document.createElement("div");
+                    listItem.textContent = `${item.FirstName} ${item.LastName}`;
+                    listItem.dataset.id = item.id; 
+                    listItem.style.padding = "8px";
+                    listItem.style.cursor = "pointer";
+                    listItem.style.borderBottom = "1px solid #ccc"; 
+                    listItem.addEventListener("click", () => {
+                        autocompleteSearchBox(item); 
+                        populateForm(item); 
+                        resultList.style.display = "none";
+                    });
+                    resultList.appendChild(listItem); 
+                });
+
+                resultList.style.display = "block";
             }
         })
-        .catch(error => console.error('Error fetching data:', error));
+        .catch(error => console.error('Error:', error));
+    } else {
+        const resultList = document.getElementById("resultList");
+        resultList.innerHTML = '';
+        resultList.style.display = "none";
+    }
 });
+
+function autocompleteSearchBox(data) {
+    const searchField = document.getElementById("searchField");
+    searchField.value = `${data.FirstName} ${data.LastName}`;
+}
+
+function populateForm(data) {
+    document.getElementById("firstName").value = data.FirstName;
+    document.getElementById("lastName").value = data.LastName;
+    document.getElementById("phoneNumber").value = data.PhoneNumber;
+    document.getElementById("dob").value = data.Date_of_Birth;
+    document.getElementById("age").value = data.Age;
+    document.getElementById("gender").value = data.Gender;
+}
+
+
 </script>
 
 </html>
